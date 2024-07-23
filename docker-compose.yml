@@ -1,0 +1,69 @@
+version: "3"
+
+services:
+  redis:
+    image: "redis:alpine"
+
+  db:
+    image: postgres:15.3
+    restart: always
+    environment:
+      POSTGRES_DB: main
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: props
+    ports:
+      - 5432:5432
+    volumes:
+      - ./db/postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -d $${POSTGRES_DB} -U $${POSTGRES_USER}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: .
+      dockerfile: ./docker/python/Dockerfile
+    volumes:
+      - ./backend:/backend
+    command: python3 manage.py runserver 0.0.0.0:8000
+    ports:
+      - "8000:8000"
+    tty: true
+    depends_on:
+      db:
+        condition: service_healthy
+
+  celery:
+    platform: linux/amd64
+    build:
+      context: .
+      dockerfile: ./docker/python/Dockerfile
+    command: celery -A recmii worker -l info
+    volumes:
+      - ./backend:/backend
+    environment:
+      POSTGRES_DB: main
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: props
+    depends_on:
+      - backend
+      - db
+      - redis
+
+  celery-beat:
+    build:
+      context: .
+      dockerfile: ./docker/python/Dockerfile
+    command: celery -A recmii beat -l INFO --scheduler django_celery_beat.schedulers:DatabaseScheduler --pidfile=
+    volumes:
+      - ./backend:/backend
+    environment:
+      POSTGRES_DB: main
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: props
+    depends_on:
+      - backend
+      - db
+      - redis

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+  </head>
+  <body>
+    <p>
+      {{in_charge.organization}}の{{in_charge.name}}からおすすめの求人の提案がありました。
+    </p>
+
+    <p>詳細は下記の URL よりご確認ください。</p>
+    <p>
+      <a href="https://recmii.com/proposals/{{ jobseeker.id }}" target="_blank"
+        >詳細を確認</a
+      >
+    </p>
+
+    <p>
+      <small
+        >※
+        配信停止を希望される方は{{in_charge.organization}}の{{in_charge.email}}宛にご連絡ください</small
+      >
+    </p>
+  </body>
+</html>

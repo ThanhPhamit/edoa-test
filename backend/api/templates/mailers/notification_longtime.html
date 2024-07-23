@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+  </head>
+  <body>
+    <p>{{ jobseeker.name }}さまが久々に求人にアクセスしました。</p>
+
+    <p>前回アクセス日：{{ jobseeker.before_record_at }}</p>
+
+    <p>
+      <a
+        href="https://agent.recmii.com/jobseeker/proposal/{{ jobseeker.id }}"
+        target="_blank"
+        >詳細を確認</a
+      >
+    </p>
+
+    <p>
+      <small
+        >※本メールは送信専用メールアドレスから配信されています。ご返信いただいてもお答えできませんのでご了承ください。</small
+      >
+    </p>
+    <p><small>お問い合わせ: recmii-ops@props-inc.com</small></p>
+  </body>
+</html>

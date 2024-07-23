@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+  </head>
+  <body>
+    <p>{{jobseeker.name}}さまより応募意向が届きました。</p>
+    <br />
+    {% if jobs.apply|length > 0 %}
+    <p>下記求人について「応募する」の意向が届きました。</p>
+    {% endif %} {% for job in jobs.apply %}
+    <p>{{ job.company }} / {{ job.position }}</p>
+    {% endfor %}
+    <br />
+    {% if jobs.cancel_apply|length > 0 %}
+    <p>下記求人について「応募辞退」の意向が届きました。</p>
+    {% endif %} {% for job in jobs.cancel_apply %}
+    <p>{{ job.company }} / {{ job.position }}</p>
+    {% endfor %}
+    <p>
+      <a
+        href="https://agent.recmii.com/jobseeker/proposal/{{ jobseeker.id }}"
+        target="_blank"
+        >詳細を確認</a
+      >
+    </p>
+
+    <p>
+      <small
+        >※本メールは送信専用メールアドレスから配信されています。ご返信いただいてもお答えできませんのでご了承ください。</small
+      >
+    </p>
+    <p><small>お問い合わせ: recmii-ops@props-inc.com</small></p>
+  </body>
+</html>
